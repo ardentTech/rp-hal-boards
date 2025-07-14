@@ -1,6 +1,6 @@
 //! Transmit packets using the LoRa 1276 module on the Adafruit Feather RP2040 RFM95 board
 //!
-//! This will blink the on-board LED when transmission is successful. On failure, the LED will remain on.
+//! This will blink the on-board LED when transmission is successful. On failure, nop.
 #![no_std]
 #![no_main]
 
@@ -86,11 +86,10 @@ fn main() -> ! {
                     led.set_high().unwrap();
                     timer.delay_ms(500);
                     led.set_low().unwrap();
+                    timer.delay_ms(500);
                 }
             },
-            Err(_) => {
-                led.set_high().unwrap();
-            }
+            Err(_) => {}
         }
         timer.delay_ms(5000);
     }

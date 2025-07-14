@@ -1,6 +1,6 @@
 //! Receive packets using the LoRa 1276 module on the Adafruit Feather RP2040 RFM95 board
 //!
-//! This will blink the on-board LED when reception is successful. On failure and when polling the IRQ, the LED will remain on.
+//! This will blink the on-board LED when reception is successful. On failure, nop.
 #![no_std]
 #![no_main]
 
@@ -74,7 +74,7 @@ fn main() -> ! {
     let mut led = pins.led.into_push_pull_output();
 
     loop {
-        match lora.poll_irq(Some(30)) { // 30 Second timeout
+        match lora.poll_irq(Some(30)) { // 30 millisecond timeout
             Ok(_) => {
                 for _ in 0..3 {
                     led.set_high().unwrap();
@@ -83,11 +83,7 @@ fn main() -> ! {
                     timer.delay_ms(500);
                 }
             },
-            Err(_) => {
-                led.set_high().unwrap();
-                timer.delay_ms(3000);
-                led.set_low().unwrap();
-            }
+            Err(_) => {}
         }
     }
 }
